@@ -2,8 +2,9 @@ package testcli
 
 import (
 	"context"
-	"example_test_harness/logger"
-	"example_test_harness/meta"
+
+	"github.com/mattmacf98/buildium_harness/logger"
+	"github.com/mattmacf98/buildium_harness/meta"
 )
 
 type Runner struct {
