@@ -10,13 +10,12 @@ import (
 )
 
 type Runner struct {
-	meta      *meta.Meta
-	steps     []func(config *ServerTestConfig) error
-	projectId string
+	meta  *meta.Meta
+	steps []func(config *ServerTestConfig) error
 }
 
-func NewRunner(meta *meta.Meta, steps []func(config *ServerTestConfig) error, projectId string) *Runner {
-	return &Runner{meta: meta, steps: steps, projectId: projectId}
+func NewRunner(meta *meta.Meta, steps []func(config *ServerTestConfig) error) *Runner {
+	return &Runner{meta: meta, steps: steps}
 }
 
 func (r *Runner) Run(ctx context.Context) error {
@@ -32,12 +31,12 @@ func (r *Runner) Run(ctx context.Context) error {
 		}
 		err := r.runTest(ctx, step)
 		if err != nil {
-			supaClient.AddProjectRun(ctx, r.projectId, i-1)
+			supaClient.AddProjectRun(ctx, r.meta.ProjectId, i-1)
 			return err
 		}
 		logger.NextStep()
 	}
-	supaClient.AddProjectRun(ctx, r.projectId, r.meta.Stage)
+	supaClient.AddProjectRun(ctx, r.meta.ProjectId, r.meta.Stage)
 	return nil
 }
 

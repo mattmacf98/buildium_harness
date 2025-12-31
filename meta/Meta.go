@@ -10,6 +10,7 @@ type Meta struct {
 	Stage      int    `json:"stage"`
 	Entrypoint string `json:"entrypoint"`
 	Path       string `json:"path"`
+	ProjectId  string `json:"projectId"`
 }
 
 func NewMeta(path string) *Meta {
