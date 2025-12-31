@@ -23,6 +23,7 @@ func (r *Runner) Run(ctx context.Context) error {
 	ctx = context.WithValue(ctx, "executable", executable)
 	supaClient := supabase.NewSupaClient(ctx)
 	ctx = context.WithValue(ctx, "supaClient", supaClient)
+	completedStage := 0
 	for i, step := range r.steps {
 		if i > r.meta.Stage {
 			return nil
@@ -33,8 +34,9 @@ func (r *Runner) Run(ctx context.Context) error {
 			return err
 		}
 		l.NextStep()
+		completedStage++
 	}
-	supaClient.AddProjectRun(ctx, r.meta.ProjectId, r.meta.Stage, logger.GetAllLogs())
+	supaClient.AddProjectRun(ctx, r.meta.ProjectId, completedStage, logger.GetAllLogs())
 	return nil
 }
 
