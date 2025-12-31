@@ -18,7 +18,7 @@ func NewRunner(meta *meta.Meta, steps []func(config *CliTestConfig) error) *Runn
 }
 
 func (r *Runner) Run(ctx context.Context) error {
-	logger := ctx.Value("logger").(*logger.Logger)
+	l := ctx.Value("logger").(*logger.Logger)
 	executable := r.meta.Path + "/" + r.meta.Entrypoint
 	ctx = context.WithValue(ctx, "executable", executable)
 	supaClient := supabase.NewSupaClient(ctx)
@@ -29,12 +29,12 @@ func (r *Runner) Run(ctx context.Context) error {
 		}
 		err := runTest(ctx, step)
 		if err != nil {
-			supaClient.AddProjectRun(ctx, r.meta.ProjectId, i-1, logger.GetLogs())
+			supaClient.AddProjectRun(ctx, r.meta.ProjectId, i-1, logger.GetAllLogs())
 			return err
 		}
-		logger.NextStep()
+		l.NextStep()
 	}
-	supaClient.AddProjectRun(ctx, r.meta.ProjectId, r.meta.Stage, logger.GetLogs())
+	supaClient.AddProjectRun(ctx, r.meta.ProjectId, r.meta.Stage, logger.GetAllLogs())
 	return nil
 }
 
