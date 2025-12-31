@@ -2,9 +2,12 @@ package supabase
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/mattmacf98/buildium_harness/logger"
 )
 
 type SupaClient struct {
@@ -15,9 +18,13 @@ func NewSupaClient(ctx context.Context) *SupaClient {
 	return &SupaClient{Client: http.DefaultClient}
 }
 
-func (c *SupaClient) AddProjectRun(ctx context.Context, projectId string, stage int) (*http.Response, error) {
+func (c *SupaClient) AddProjectRun(ctx context.Context, projectId string, stage int, logs []logger.Log) (*http.Response, error) {
+	logsJson, err := json.Marshal(logs)
+	if err != nil {
+		return nil, err
+	}
 	req, err := http.NewRequestWithContext(ctx, "POST", "https://dpwumtpjesedslulexqz.supabase.co/functions/v1/create-project-run",
-		strings.NewReader(fmt.Sprintf(`{"projectId":"%s", "stage":%d}`, projectId, stage)))
+		strings.NewReader(fmt.Sprintf(`{"projectId":"%s", "stage":%d, "logsJson":%s}`, projectId, stage, logsJson)))
 	if err != nil {
 		return nil, err
 	}

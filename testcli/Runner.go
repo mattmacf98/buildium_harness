@@ -29,12 +29,12 @@ func (r *Runner) Run(ctx context.Context) error {
 		}
 		err := runTest(ctx, step)
 		if err != nil {
-			supaClient.AddProjectRun(ctx, r.meta.ProjectId, i-1)
+			supaClient.AddProjectRun(ctx, r.meta.ProjectId, i-1, logger.GetLogs())
 			return err
 		}
 		logger.NextStep()
 	}
-	supaClient.AddProjectRun(ctx, r.meta.ProjectId, r.meta.Stage)
+	supaClient.AddProjectRun(ctx, r.meta.ProjectId, r.meta.Stage, logger.GetLogs())
 	return nil
 }
 

@@ -6,8 +6,15 @@ import (
 	"strings"
 )
 
+type Log struct {
+	Stage   int    `json:"stage"`
+	Message string `json:"message"`
+	Type    string `json:"type"`
+}
+
 type Logger struct {
 	step int
+	logs []Log
 }
 
 func NewLogger() *Logger {
@@ -22,16 +29,23 @@ func (l *Logger) NextStep() {
 	l.step++
 }
 
+func (l *Logger) GetLogs() []Log {
+	return l.logs
+}
+
 func (l *Logger) LogTitle(title string) {
 	fmt.Printf("--------------------------------Test %d: %s--------------------------------\n", l.step, title)
+	l.logs = append(l.logs, Log{Stage: l.step, Message: title, Type: "HEADER"})
 }
 
 func (l *Logger) Log(message string) {
 	fmt.Printf(Colorize(Green, "[Test %d] [Success]: %s\n"), l.step, message)
+	l.logs = append(l.logs, Log{Stage: l.step, Message: message, Type: "SUCCESS"})
 }
 
 func (l *Logger) LogError(message string) {
 	fmt.Printf(Colorize(Red, "[Test %d] [Error]: %s\n"), l.step, message)
+	l.logs = append(l.logs, Log{Stage: l.step, Message: message, Type: "FAILURE"})
 }
 
 func (l *Logger) LogClientCode(message string) {
