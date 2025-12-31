@@ -15,7 +15,7 @@ type CliTestConfig struct {
 	Executable string
 }
 
-func RunCliTest(steps []func(config *CliTestConfig) error) {
+func RunCliTest(steps []func(config *CliTestConfig) error, projectId string) {
 	path := flag.String("path", "client_bin", "Path to client binary")
 	flag.Parse()
 	if *path == "" {
@@ -26,6 +26,6 @@ func RunCliTest(steps []func(config *CliTestConfig) error) {
 
 	logger := logger.NewLogger()
 	ctx := context.WithValue(context.Background(), "logger", logger)
-	runner := NewRunner(meta, steps)
+	runner := NewRunner(meta, steps, projectId)
 	runner.Run(ctx)
 }
