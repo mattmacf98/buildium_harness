@@ -15,14 +15,13 @@ func NewSupaClient(ctx context.Context) *SupaClient {
 	return &SupaClient{Client: http.DefaultClient}
 }
 
-func (c *SupaClient) CallDemoFunction(ctx context.Context, name string) (*http.Response, error) {
-	req, err := http.NewRequestWithContext(ctx, "POST", "https://dpwumtpjesedslulexqz.supabase.co/functions/v1/hello-world",
-		strings.NewReader(fmt.Sprintf(`{"name":"%s"}`, name)))
+func (c *SupaClient) AddProjectRun(ctx context.Context, projectId string, stage int) (*http.Response, error) {
+	req, err := http.NewRequestWithContext(ctx, "POST", "https://dpwumtpjesedslulexqz.supabase.co/functions/v1/create-tutorial-project-run",
+		strings.NewReader(fmt.Sprintf(`{"projectId":"%s", "stage":%d}`, projectId, stage)))
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Authorization", "Bearer sb_publishable_KJy0pE3QshfkUgn_QHrVYQ_BoiLh2i0")
-	req.Header.Set("apikey", "sb_publishable_KJy0pE3QshfkUgn_QHrVYQ_BoiLh2i0")
+	req.Header.Set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwd3VtdHBqZXNlZHNsdWxleHF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxNDE4MzksImV4cCI6MjA4MjcxNzgzOX0.JYXW1bzTOmlCtngrlYLAbnGzRXDIcH0mDlwpbg1u8Rs")
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := c.Client.Do(req)
@@ -30,5 +29,4 @@ func (c *SupaClient) CallDemoFunction(ctx context.Context, name string) (*http.R
 		return nil, err
 	}
 	return resp, nil
-
 }

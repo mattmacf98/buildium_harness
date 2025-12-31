@@ -15,7 +15,7 @@ type ServerTestConfig struct {
 	Server *TestServer
 }
 
-func RunServerTest(steps []func(config *ServerTestConfig) error) {
+func RunServerTest(steps []func(config *ServerTestConfig) error, projectId string) {
 	path := flag.String("path", "client_bin", "Path to client binary")
 	flag.Parse()
 	if *path == "" {
@@ -26,6 +26,6 @@ func RunServerTest(steps []func(config *ServerTestConfig) error) {
 
 	logger := logger.NewLogger()
 	ctx := context.WithValue(context.Background(), "logger", logger)
-	runner := NewRunner(meta, steps)
+	runner := NewRunner(meta, steps, projectId)
 	runner.Run(ctx)
 }

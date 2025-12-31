@@ -9,12 +9,13 @@ import (
 )
 
 type Runner struct {
-	meta  *meta.Meta
-	steps []func(config *CliTestConfig) error
+	meta      *meta.Meta
+	steps     []func(config *CliTestConfig) error
+	projectId string
 }
 
-func NewRunner(meta *meta.Meta, steps []func(config *CliTestConfig) error) *Runner {
-	return &Runner{meta: meta, steps: steps}
+func NewRunner(meta *meta.Meta, steps []func(config *CliTestConfig) error, projectId string) *Runner {
+	return &Runner{meta: meta, steps: steps, projectId: projectId}
 }
 
 func (r *Runner) Run(ctx context.Context) error {
@@ -29,25 +30,24 @@ func (r *Runner) Run(ctx context.Context) error {
 		}
 		err := runTest(ctx, step)
 		if err != nil {
+			supaClient.AddProjectRun(ctx, r.projectId, i-1)
 			return err
 		}
 		logger.NextStep()
 	}
+	supaClient.AddProjectRun(ctx, r.projectId, r.meta.Stage)
 	return nil
 }
 
 func runTest(ctx context.Context, step func(config *CliTestConfig) error) error {
 	logger := ctx.Value("logger").(*logger.Logger)
 	executable := ctx.Value("executable").(string)
-	supaClient := ctx.Value("supaClient").(*supabase.SupaClient)
 	err := step(&CliTestConfig{Logger: logger, Executable: executable})
 	if err != nil {
 		logger.LogError("Test failed")
-		supaClient.CallDemoFunction(ctx, "FAILED")
 		return err
 	}
 	logger.Log("Test passed")
-	supaClient.CallDemoFunction(ctx, "PASSED")
 	return nil
 
 }

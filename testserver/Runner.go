@@ -10,12 +10,13 @@ import (
 )
 
 type Runner struct {
-	meta  *meta.Meta
-	steps []func(config *ServerTestConfig) error
+	meta      *meta.Meta
+	steps     []func(config *ServerTestConfig) error
+	projectId string
 }
 
-func NewRunner(meta *meta.Meta, steps []func(config *ServerTestConfig) error) *Runner {
-	return &Runner{meta: meta, steps: steps}
+func NewRunner(meta *meta.Meta, steps []func(config *ServerTestConfig) error, projectId string) *Runner {
+	return &Runner{meta: meta, steps: steps, projectId: projectId}
 }
 
 func (r *Runner) Run(ctx context.Context) error {
@@ -31,17 +32,18 @@ func (r *Runner) Run(ctx context.Context) error {
 		}
 		err := r.runTest(ctx, step)
 		if err != nil {
+			supaClient.AddProjectRun(ctx, r.projectId, i-1)
 			return err
 		}
 		logger.NextStep()
 	}
+	supaClient.AddProjectRun(ctx, r.projectId, r.meta.Stage)
 	return nil
 }
 
 func (r *Runner) runTest(ctx context.Context, step func(config *ServerTestConfig) error) error {
 	logger := ctx.Value("logger").(*logger.Logger)
 	testServer := ctx.Value("testServer").(*TestServer)
-	supaClient := ctx.Value("supaClient").(*supabase.SupaClient)
 	testServer.Start()
 	defer testServer.Stop()
 	time.Sleep(500 * time.Millisecond)
@@ -49,10 +51,8 @@ func (r *Runner) runTest(ctx context.Context, step func(config *ServerTestConfig
 	err := step(&ServerTestConfig{Logger: logger, Server: testServer})
 	if err != nil {
 		logger.LogError("Test failed")
-		supaClient.CallDemoFunction(ctx, "FAILED")
 		return err
 	}
 	logger.Log("Test passed")
-	supaClient.CallDemoFunction(ctx, "PASSED")
 	return nil
 }
