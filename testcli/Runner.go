@@ -29,6 +29,10 @@ func (r *Runner) Run(ctx context.Context) error {
 		return fmt.Errorf("BUILDIUM_EMAIL and BUILDIUM_PASSWORD must be set")
 	}
 	supaClient := supabase.NewSupaClient(ctx)
+	err := supaClient.Login(ctx, email, password)
+	if err != nil {
+		return fmt.Errorf("failed to login: %v", err)
+	}
 	ctx = context.WithValue(ctx, "supaClient", supaClient)
 	completedStage := 0
 	for i, step := range r.steps {
