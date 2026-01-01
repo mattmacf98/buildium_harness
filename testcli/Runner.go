@@ -34,7 +34,7 @@ func (r *Runner) Run(ctx context.Context) error {
 		return fmt.Errorf("failed to login: %v", err)
 	}
 	ctx = context.WithValue(ctx, "supaClient", supaClient)
-	completedStage := 0
+	completedStage := -1
 	for i, step := range r.steps {
 		if i > r.meta.Stage {
 			return nil
