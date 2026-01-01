@@ -41,7 +41,7 @@ func (r *Runner) Run(ctx context.Context) error {
 	completedStage := -1
 	for i, step := range r.steps {
 		if i > r.meta.Stage {
-			return nil
+			break
 		}
 		err := r.runTest(ctx, step)
 		if err != nil {

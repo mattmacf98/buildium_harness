@@ -22,9 +22,9 @@ type SupaClient struct {
 func NewSupaClient(ctx context.Context) *SupaClient {
 	environment := os.Getenv("ENVIRONMENT")
 	if environment == "PROD" {
-		return &SupaClient{Client: http.DefaultClient, BaseUrl: "https://dpwumtpjesedslulexqz.supabase.co", AnonKey: os.Getenv("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwd3VtdHBqZXNlZHNsdWxleHF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxNDE4MzksImV4cCI6MjA4MjcxNzgzOX0.JYXW1bzTOmlCtngrlYLAbnGzRXDIcH0mDlwpbg1u8Rs")}
+		return &SupaClient{Client: http.DefaultClient, BaseUrl: "https://dpwumtpjesedslulexqz.supabase.co", AnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwd3VtdHBqZXNlZHNsdWxleHF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxNDE4MzksImV4cCI6MjA4MjcxNzgzOX0.JYXW1bzTOmlCtngrlYLAbnGzRXDIcH0mDlwpbg1u8Rs"}
 	} else {
-		return &SupaClient{Client: http.DefaultClient, BaseUrl: "http://127.0.0.1:54321", AnonKey: os.Getenv("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0")}
+		return &SupaClient{Client: http.DefaultClient, BaseUrl: "http://127.0.0.1:54321", AnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"}
 	}
 }
 
