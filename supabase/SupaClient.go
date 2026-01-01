@@ -26,7 +26,7 @@ func (c *SupaClient) AddProjectRun(ctx context.Context, projectId string, stage 
 		return nil, err
 	}
 	req, err := http.NewRequestWithContext(ctx, "POST", "https://dpwumtpjesedslulexqz.supabase.co/functions/v1/create-project-run",
-		strings.NewReader(fmt.Sprintf(`{"projectId":"%s", "stage":%d, "logsJson":%s}`, projectId, stage, logsJson)))
+		strings.NewReader(fmt.Sprintf(`{"projectId":"%s", "stage":%d, "logsJson":%s, "token":"%s"}`, projectId, stage, logsJson, c.Token)))
 	if err != nil {
 		return nil, err
 	}
