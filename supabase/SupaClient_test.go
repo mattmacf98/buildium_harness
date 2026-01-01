@@ -2,6 +2,7 @@ package supabase
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"testing"
 
@@ -33,5 +34,34 @@ func TestCallDemoFunction(t *testing.T) {
 		t.Fatalf("Failed to add project run: %v", resp.StatusCode)
 
 	}
+}
 
+func TestLogin(t *testing.T) {
+	ctx := context.Background()
+	supaClient := NewSupaClient(ctx)
+	resp, err := supaClient.Login(ctx, "test@test.com", "test1234")
+	if err != nil {
+		t.Fatalf("Failed to login: %v", err)
+	}
+	if resp.StatusCode != 200 {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			t.Fatalf("Failed to read response body: %v", err)
+		}
+		t.Log(string(body))
+		t.Fatalf("Failed to login: %v", resp.StatusCode)
+	}
+
+	var token struct {
+		Token string `json:"token"`
+	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("Failed to read response body: %v", err)
+	}
+	err = json.Unmarshal(body, &token)
+	if err != nil {
+		t.Fatalf("Failed to unmarshal response body: %v", err)
+	}
+	t.Log(token.Token)
 }

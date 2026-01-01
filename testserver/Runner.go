@@ -2,6 +2,8 @@ package testserver
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"time"
 
 	"github.com/mattmacf98/buildium_harness/logger"
@@ -23,6 +25,11 @@ func (r *Runner) Run(ctx context.Context) error {
 	executable := r.meta.Path + "/" + r.meta.Entrypoint
 	server := NewTestServer(executable, l)
 	ctx = context.WithValue(ctx, "testServer", server)
+	email := os.Getenv("BUILDIUM_EMAIL")
+	password := os.Getenv("BUILDIUM_PASSWORD")
+	if email == "" || password == "" {
+		return fmt.Errorf("BUILDIUM_EMAIL and BUILDIUM_PASSWORD must be set")
+	}
 	supaClient := supabase.NewSupaClient(ctx)
 	ctx = context.WithValue(ctx, "supaClient", supaClient)
 	completedStage := 0
