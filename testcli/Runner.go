@@ -59,7 +59,7 @@ func runTest(ctx context.Context, step func(config *CliTestConfig) error) error 
 		logger.LogError("Test failed")
 		return err
 	}
-	logger.Log("Test passed")
+	logger.LogSuccess("Test passed")
 	return nil
 
 }

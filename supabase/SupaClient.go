@@ -21,14 +21,20 @@ type SupaClient struct {
 
 func NewSupaClient(ctx context.Context) *SupaClient {
 	environment := os.Getenv("ENVIRONMENT")
-	if environment == "PROD" {
+	switch environment {
+	case "PROD":
 		return &SupaClient{Client: http.DefaultClient, BaseUrl: "https://dpwumtpjesedslulexqz.supabase.co", AnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwd3VtdHBqZXNlZHNsdWxleHF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxNDE4MzksImV4cCI6MjA4MjcxNzgzOX0.JYXW1bzTOmlCtngrlYLAbnGzRXDIcH0mDlwpbg1u8Rs"}
-	} else {
+	case "BUILDING":
+		return &SupaClient{Client: http.DefaultClient, BaseUrl: "", AnonKey: ""}
+	default:
 		return &SupaClient{Client: http.DefaultClient, BaseUrl: "http://127.0.0.1:54321", AnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"}
 	}
 }
 
 func (c *SupaClient) AddProjectRun(ctx context.Context, projectId string, stage int, logs []logger.Log) (*http.Response, error) {
+	if c.BaseUrl == "" {
+		return nil, nil
+	}
 	logsJson, err := json.Marshal(logs)
 	if err != nil {
 		return nil, err
@@ -50,6 +56,9 @@ func (c *SupaClient) AddProjectRun(ctx context.Context, projectId string, stage 
 }
 
 func (c *SupaClient) Login(ctx context.Context, email string, password string) error {
+	if c.BaseUrl == "" {
+		return nil
+	}
 	req, err := http.NewRequestWithContext(ctx, "POST", c.BaseUrl+"/functions/v1/login",
 		strings.NewReader(fmt.Sprintf(`{"email":"%s", "password":"%s"}`, email, password)))
 	if err != nil {

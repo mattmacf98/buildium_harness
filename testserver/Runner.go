@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/mattmacf98/buildium_harness/logger"
@@ -60,13 +61,24 @@ func (r *Runner) runTest(ctx context.Context, step func(config *ServerTestConfig
 	testServer := ctx.Value("testServer").(*TestServer)
 	testServer.Start()
 	defer testServer.Stop()
-	time.Sleep(500 * time.Millisecond)
 
-	err := step(&ServerTestConfig{Logger: logger, Server: testServer})
+	serverStartupTimeStr := os.Getenv("SERVER_STARTUP_TIME")
+	var serverStartupTimeMs int = 500
+	var err error
+	if serverStartupTimeStr != "" {
+		serverStartupTimeMs, err = strconv.Atoi(serverStartupTimeStr)
+		if err != nil {
+			logger.LogError(fmt.Sprintf("invalid server startup time: %v", err))
+			return fmt.Errorf("invalid server startup time: %v", err)
+		}
+	}
+	time.Sleep(time.Duration(serverStartupTimeMs) * time.Millisecond)
+
+	err = step(&ServerTestConfig{Logger: logger, Server: testServer})
 	if err != nil {
 		logger.LogError("Test failed")
 		return err
 	}
-	logger.Log("Test passed")
+	logger.LogSuccess("Test passed")
 	return nil
 }

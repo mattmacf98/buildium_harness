@@ -39,9 +39,14 @@ func (l *Logger) LogTitle(title string) {
 	sharedLogs = append(sharedLogs, Log{Stage: l.step, Message: title, Type: "HEADER"})
 }
 
-func (l *Logger) Log(message string) {
+func (l *Logger) LogSuccess(message string) {
 	fmt.Printf(Colorize(Green, "[Test %d] [Success]: %s\n"), l.step, message)
 	sharedLogs = append(sharedLogs, Log{Stage: l.step, Message: message, Type: "SUCCESS"})
+}
+
+func (l *Logger) LogInfo(message string) {
+	fmt.Printf(Colorize(Blue, "[Test %d] [Info]: %s\n"), l.step, message)
+	sharedLogs = append(sharedLogs, Log{Stage: l.step, Message: message, Type: "INFO"})
 }
 
 func (l *Logger) LogError(message string) {
