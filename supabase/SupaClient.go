@@ -55,9 +55,15 @@ func (c *SupaClient) AddProjectRun(ctx context.Context, projectId string, stage 
 	return resp, nil
 }
 
-func (c *SupaClient) Login(ctx context.Context, email string, password string) error {
+func (c *SupaClient) Login(ctx context.Context) error {
 	if c.BaseUrl == "" {
 		return nil
+	}
+	email := os.Getenv("BUILDIUM_EMAIL")
+	password := os.Getenv("BUILDIUM_PASSWORD")
+	if email == "" || password == "" {
+		fmt.Printf("BUILDIUM_EMAIL and BUILDIUM_PASSWORD must be set")
+		return fmt.Errorf("BUILDIUM_EMAIL and BUILDIUM_PASSWORD must be set")
 	}
 	req, err := http.NewRequestWithContext(ctx, "POST", c.BaseUrl+"/functions/v1/login",
 		strings.NewReader(fmt.Sprintf(`{"email":"%s", "password":"%s"}`, email, password)))

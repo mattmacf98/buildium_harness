@@ -26,14 +26,8 @@ func (r *Runner) Run(ctx context.Context) error {
 	executable := r.meta.Path + "/" + r.meta.Entrypoint
 	server := NewTestServer(executable, l)
 	ctx = context.WithValue(ctx, "testServer", server)
-	email := os.Getenv("BUILDIUM_EMAIL")
-	password := os.Getenv("BUILDIUM_PASSWORD")
-	if email == "" || password == "" {
-		fmt.Printf("BUILDIUM_EMAIL and BUILDIUM_PASSWORD must be set")
-		return fmt.Errorf("BUILDIUM_EMAIL and BUILDIUM_PASSWORD must be set")
-	}
 	supaClient := supabase.NewSupaClient(ctx)
-	err := supaClient.Login(ctx, email, password)
+	err := supaClient.Login(ctx)
 	if err != nil {
 		fmt.Printf("failed to login: %v", err)
 		return fmt.Errorf("failed to login: %v", err)

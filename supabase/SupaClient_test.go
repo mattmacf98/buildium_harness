@@ -3,6 +3,7 @@ package supabase
 import (
 	"context"
 	"io"
+	"os"
 	"testing"
 
 	"github.com/mattmacf98/buildium_harness/logger"
@@ -38,7 +39,9 @@ func TestCallDemoFunction(t *testing.T) {
 func TestLogin(t *testing.T) {
 	ctx := context.Background()
 	supaClient := NewSupaClient(ctx)
-	err := supaClient.Login(ctx, "test@test.com", "test1234")
+	os.Setenv("BUILDIUM_EMAIL", "test@test.com")
+	os.Setenv("BUILDIUM_PASSWORD", "test1234")
+	err := supaClient.Login(ctx)
 	if err != nil {
 		t.Fatalf("Failed to login: %v", err)
 	}
