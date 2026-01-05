@@ -9,7 +9,7 @@ import (
 	"github.com/mattmacf98/buildium_harness/logger"
 )
 
-func TestCallDemoFunction(t *testing.T) {
+func TestAddProjectRun(t *testing.T) {
 	ctx := context.Background()
 	supaClient := NewSupaClient(ctx)
 	logs := []logger.Log{
