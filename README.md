@@ -7,7 +7,7 @@ This package provides utilities to streamline the creation of step-by-step tutor
 ## Installation
 
 ```bash
-go get github.com/mattmacf98/buildium_harness
+go get github.com/builium-org/buildium_harness
 ```
 
 ## Package Overview
@@ -29,7 +29,7 @@ For tutorials that test command-line applications:
 ```go
 package main
 
-import "github.com/mattmacf98/buildium_harness/testcli"
+import "github.com/builium-org/buildium_harness/testcli"
 
 func main() {
     testcli.RunCliTest([]func(config *testcli.CliTestConfig) error{
@@ -57,7 +57,7 @@ For tutorials that test HTTP servers or long-running processes:
 ```go
 package main
 
-import "github.com/mattmacf98/buildium_harness/testserver"
+import "github.com/builium-org/buildium_harness/testserver"
 
 func main() {
     testserver.RunServerTest([]func(config *testserver.ServerTestConfig) error{

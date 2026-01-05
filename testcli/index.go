@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mattmacf98/buildium_harness/logger"
-	"github.com/mattmacf98/buildium_harness/meta"
+	"github.com/buildium-org/buildium_harness/logger"
+	"github.com/buildium-org/buildium_harness/meta"
 )
 
 type CliTestConfig struct {
