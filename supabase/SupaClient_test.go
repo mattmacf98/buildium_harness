@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/mattmacf98/buildium_harness/logger"
+	"github.com/buildium-org/buildium_harness/logger"
 )
 
 func TestAddProjectRun(t *testing.T) {

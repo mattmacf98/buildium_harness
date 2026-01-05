@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mattmacf98/buildium_harness/logger"
+	"github.com/buildium-org/buildium_harness/logger"
 )
 
 type SupaClient struct {
