@@ -12,8 +12,8 @@ type CliTestConfig struct {
 	Executable string
 }
 
-func RunCliTest(steps []func(config *CliTestConfig) error, metaPath string) {
-	meta := meta.NewMeta(metaPath)
+func RunCliTest(steps []func(config *CliTestConfig) error) {
+	meta := meta.NewMeta()
 
 	logger := logger.NewLogger()
 	ctx := context.WithValue(context.Background(), "logger", logger)

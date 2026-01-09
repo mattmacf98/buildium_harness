@@ -13,8 +13,9 @@ type Meta struct {
 	ProjectId  string `json:"projectId"`
 }
 
-func NewMeta(path string) *Meta {
-	metaBytes, err := os.ReadFile(path + "/meta.json")
+func NewMeta() *Meta {
+	metaPath := "app/bin/meta.json"
+	metaBytes, err := os.ReadFile(metaPath)
 	if err != nil {
 		fmt.Println("Error reading meta file:", err)
 		os.Exit(1)
@@ -24,6 +25,6 @@ func NewMeta(path string) *Meta {
 		fmt.Println("Error unmarshalling meta file:", err)
 		os.Exit(1)
 	}
-	meta.Path = path
+	meta.Path = metaPath
 	return &meta
 }
