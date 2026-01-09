@@ -18,10 +18,10 @@ func newTestContext() context.Context {
 
 func TestNewRunner(t *testing.T) {
 	m := &meta.Meta{
-		Stage:      2,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         2,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	steps := []func(config *ServerTestConfig) error{
@@ -46,10 +46,10 @@ func TestNewRunner(t *testing.T) {
 
 func TestNewRunnerWithEmptySteps(t *testing.T) {
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	steps := []func(config *ServerTestConfig) error{}
@@ -138,10 +138,10 @@ func TestRunAllStepsPass(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      2,
-		Entrypoint: "true", // Use 'true' command which exits immediately
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         2,
+		Entrypoint:    "true", // Use 'true' command which exits immediately
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	callOrder := []int{}
@@ -193,10 +193,10 @@ func TestRunStopsAtStage(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      1, // Only run steps 0 and 1
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         1, // Only run steps 0 and 1
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	callCount := 0
@@ -245,10 +245,10 @@ func TestRunStageZero(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      0, // Only run step 0
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         0, // Only run step 0
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	callCount := 0
@@ -289,10 +289,10 @@ func TestRunStepFails(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      3,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         3,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	expectedError := errors.New("step 1 failed")
@@ -343,10 +343,10 @@ func TestRunFirstStepFails(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      2,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         2,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	expectedError := errors.New("first step failed")
@@ -389,10 +389,10 @@ func TestRunConfigHasLogger(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	var receivedLogger *logger.Logger
@@ -428,10 +428,10 @@ func TestRunConfigHasServer(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	var receivedServer *TestServer
@@ -462,10 +462,10 @@ func TestRunWithNoSteps(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      5,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         5,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	steps := []func(config *ServerTestConfig) error{}
@@ -491,10 +491,10 @@ func TestRunMultipleStepsWithIntermediateFailure(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      4,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         4,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	callSequence := []string{}
@@ -553,10 +553,10 @@ func TestRunWithHighStageAndFewerSteps(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      100, // Much higher than actual steps
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         100, // Much higher than actual steps
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	callCount := 0
@@ -597,10 +597,10 @@ func TestServerStartupTimeEnvVariable(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	stepCalled := false
@@ -636,10 +636,10 @@ func TestServerStartupTimeInvalidEnvVariable(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	steps := []func(config *ServerTestConfig) error{
@@ -673,10 +673,10 @@ func TestServerStartupTimeDefaultValue(t *testing.T) {
 	}()
 
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	stepCalled := false
@@ -739,10 +739,10 @@ func TestServerExecutablePath(t *testing.T) {
 	defer os.Setenv("SERVER_STARTUP_TIME", originalStartup)
 
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "true",
-		Path:       "/usr/bin",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "true",
+		ExecutableDir: "/usr/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	var serverExecutable string

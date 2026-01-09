@@ -20,7 +20,7 @@ func NewRunner(meta *meta.Meta, steps []func(config *CliTestConfig) error) *Runn
 
 func (r *Runner) Run(ctx context.Context) error {
 	l := ctx.Value("logger").(*logger.Logger)
-	executable := r.meta.Path + "/" + r.meta.Entrypoint
+	executable := r.meta.ExecutableDir + "/" + r.meta.Entrypoint
 	ctx = context.WithValue(ctx, "executable", executable)
 	supaClient := supabase.NewSupaClient(ctx)
 	err := supaClient.Login(ctx)

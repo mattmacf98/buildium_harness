@@ -23,7 +23,7 @@ func NewRunner(meta *meta.Meta, steps []func(config *ServerTestConfig) error) *R
 
 func (r *Runner) Run(ctx context.Context) error {
 	l := ctx.Value("logger").(*logger.Logger)
-	executable := r.meta.Path + "/" + r.meta.Entrypoint
+	executable := r.meta.ExecutableDir + "/" + r.meta.Entrypoint
 	server := NewTestServer(executable, l)
 	ctx = context.WithValue(ctx, "testServer", server)
 	supaClient := supabase.NewSupaClient(ctx)

@@ -7,10 +7,10 @@ import (
 
 func TestMetaStruct_JSONMarshalling(t *testing.T) {
 	meta := Meta{
-		Stage:      3,
-		Entrypoint: "main.go",
-		Path:       "/some/path",
-		ProjectId:  "proj-123",
+		Stage:         3,
+		Entrypoint:    "main.go",
+		ExecutableDir: "/some/path",
+		ProjectId:     "proj-123",
 	}
 
 	data, err := json.Marshal(meta)
@@ -29,8 +29,8 @@ func TestMetaStruct_JSONMarshalling(t *testing.T) {
 	if result.Entrypoint != meta.Entrypoint {
 		t.Errorf("Entrypoint = %q, want %q", result.Entrypoint, meta.Entrypoint)
 	}
-	if result.Path != meta.Path {
-		t.Errorf("Path = %q, want %q", result.Path, meta.Path)
+	if result.ExecutableDir != meta.ExecutableDir {
+		t.Errorf("Path = %q, want %q", result.ExecutableDir, meta.ExecutableDir)
 	}
 	if result.ProjectId != meta.ProjectId {
 		t.Errorf("ProjectId = %q, want %q", result.ProjectId, meta.ProjectId)
@@ -39,10 +39,10 @@ func TestMetaStruct_JSONMarshalling(t *testing.T) {
 
 func TestMetaStruct_JSONTags(t *testing.T) {
 	meta := Meta{
-		Stage:      5,
-		Entrypoint: "app",
-		Path:       "/test",
-		ProjectId:  "abc-456",
+		Stage:         5,
+		Entrypoint:    "app",
+		ExecutableDir: "/test",
+		ProjectId:     "abc-456",
 	}
 
 	data, err := json.Marshal(meta)

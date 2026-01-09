@@ -18,10 +18,10 @@ func newTestContext() context.Context {
 
 func TestNewRunner(t *testing.T) {
 	m := &meta.Meta{
-		Stage:      2,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         2,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	steps := []func(config *CliTestConfig) error{
@@ -46,10 +46,10 @@ func TestNewRunner(t *testing.T) {
 
 func TestNewRunnerWithEmptySteps(t *testing.T) {
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	steps := []func(config *CliTestConfig) error{}
@@ -72,10 +72,10 @@ func TestRunAllStepsPass(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      2,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         2,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	callOrder := []int{}
@@ -122,10 +122,10 @@ func TestRunStopsAtStage(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      1, // Only run steps 0 and 1
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         1, // Only run steps 0 and 1
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	callCount := 0
@@ -169,10 +169,10 @@ func TestRunStageZero(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      0, // Only run step 0
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         0, // Only run step 0
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	callCount := 0
@@ -208,10 +208,10 @@ func TestRunStepFails(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      3,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         3,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	expectedError := errors.New("step 1 failed")
@@ -257,10 +257,10 @@ func TestRunFirstStepFails(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      2,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         2,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	expectedError := errors.New("first step failed")
@@ -298,10 +298,10 @@ func TestRunConfigHasCorrectExecutable(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "myapp",
-		Path:       "/usr/local/bin",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "myapp",
+		ExecutableDir: "/usr/local/bin",
+		ProjectId:     "test-project-123",
 	}
 
 	var receivedExecutable string
@@ -333,10 +333,10 @@ func TestRunConfigHasLogger(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      0,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         0,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	var receivedLogger *logger.Logger
@@ -367,10 +367,10 @@ func TestRunWithNoSteps(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      5,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         5,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	steps := []func(config *CliTestConfig) error{}
@@ -407,10 +407,10 @@ func TestRunMultipleStepsWithIntermediateFailure(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      4,
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         4,
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	callSequence := []string{}
@@ -464,10 +464,10 @@ func TestRunWithHighStageAndFewerSteps(t *testing.T) {
 	defer os.Setenv("ENVIRONMENT", originalEnv)
 
 	m := &meta.Meta{
-		Stage:      100, // Much higher than actual steps
-		Entrypoint: "app",
-		Path:       "/test/path",
-		ProjectId:  "test-project-123",
+		Stage:         100, // Much higher than actual steps
+		Entrypoint:    "app",
+		ExecutableDir: "/test/path",
+		ProjectId:     "test-project-123",
 	}
 
 	callCount := 0
