@@ -12,8 +12,8 @@ type ServerTestConfig struct {
 	Server *TestServer
 }
 
-func RunServerTest(steps []func(config *ServerTestConfig) error) {
-	meta := meta.NewMetaFromEnv()
+func RunServerTest(steps []func(config *ServerTestConfig) error, metaPath string) {
+	meta := meta.NewMeta(metaPath)
 
 	logger := logger.NewLogger()
 	ctx := context.WithValue(context.Background(), "logger", logger)
