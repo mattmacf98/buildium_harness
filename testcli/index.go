@@ -2,9 +2,6 @@ package testcli
 
 import (
 	"context"
-	"flag"
-	"fmt"
-	"os"
 
 	"github.com/buildium-org/buildium_harness/logger"
 	"github.com/buildium-org/buildium_harness/meta"
@@ -16,13 +13,7 @@ type CliTestConfig struct {
 }
 
 func RunCliTest(steps []func(config *CliTestConfig) error) {
-	path := flag.String("path", "client_bin", "Path to client binary")
-	flag.Parse()
-	if *path == "" {
-		fmt.Println("Path to client binary required")
-		os.Exit(1)
-	}
-	meta := meta.NewMeta(*path)
+	meta := meta.NewMetaFromEnv()
 
 	logger := logger.NewLogger()
 	ctx := context.WithValue(context.Background(), "logger", logger)

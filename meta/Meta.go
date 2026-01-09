@@ -2,6 +2,7 @@ package meta
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"os"
 )
@@ -26,4 +27,15 @@ func NewMeta(path string) *Meta {
 	}
 	meta.Path = path
 	return &meta
+}
+
+func NewMetaFromEnv() *Meta {
+	path := flag.String("path", "client_bin", "Path to client binary")
+	flag.Parse()
+	if *path == "" {
+		fmt.Println("Path to client binary required")
+		os.Exit(1)
+	}
+	meta := NewMeta(*path)
+	return meta
 }
