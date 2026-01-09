@@ -14,7 +14,7 @@ type Meta struct {
 }
 
 func NewMeta() *Meta {
-	metaPath := "app/bin/meta.json"
+	metaPath := "/app/bin/meta.json"
 	metaBytes, err := os.ReadFile(metaPath)
 	if err != nil {
 		fmt.Println("Error reading meta file:", err)
