@@ -14,7 +14,11 @@ type Meta struct {
 }
 
 func NewMeta() *Meta {
-	metaPath := "/app/bin/meta.json"
+	clientDir := os.Getenv("CLIENT_DIR")
+	if clientDir == "" {
+		clientDir = "/app/bin"
+	}
+	metaPath := clientDir + "/meta.json"
 	metaBytes, err := os.ReadFile(metaPath)
 	if err != nil {
 		fmt.Println("Error reading meta file:", err)
@@ -25,6 +29,6 @@ func NewMeta() *Meta {
 		fmt.Println("Error unmarshalling meta file:", err)
 		os.Exit(1)
 	}
-	meta.ExecutableDir = "/app/bin"
+	meta.ExecutableDir = clientDir
 	return &meta
 }
