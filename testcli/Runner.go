@@ -3,19 +3,28 @@ package testcli
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"github.com/buildium-org/buildium_harness/logger"
 	"github.com/buildium-org/buildium_harness/meta"
 	"github.com/buildium-org/buildium_harness/supabase"
 )
 
-type Runner struct {
-	meta  *meta.Meta
-	steps []func(config *CliTestConfig) error
+func SkipStep(config *CliTestConfig) error {
+	logger := *config.Logger
+	logger.LogTitle("Skipping Step")
+	logger.LogInfo("Skipping step")
+	return nil
 }
 
-func NewRunner(meta *meta.Meta, steps []func(config *CliTestConfig) error) *Runner {
-	return &Runner{meta: meta, steps: steps}
+type Runner struct {
+	meta      *meta.Meta
+	steps     []func(config *CliTestConfig) error
+	skipSteps []int
+}
+
+func NewRunner(meta *meta.Meta, steps []func(config *CliTestConfig) error, skipSteps []int) *Runner {
+	return &Runner{meta: meta, steps: steps, skipSteps: skipSteps}
 }
 
 func (r *Runner) Run(ctx context.Context) error {
@@ -33,7 +42,12 @@ func (r *Runner) Run(ctx context.Context) error {
 		if i > r.meta.Stage {
 			break
 		}
-		err := runTest(ctx, step)
+		var err error
+		if slices.Contains(r.skipSteps, i) {
+			err = runTest(ctx, SkipStep)
+		} else {
+			err = runTest(ctx, step)
+		}
 		if err != nil {
 			supaClient.AddProjectRun(ctx, r.meta.ProjectId, i-1, logger.GetAllLogs())
 			return err

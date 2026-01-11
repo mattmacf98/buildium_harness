@@ -29,7 +29,7 @@ func TestNewRunner(t *testing.T) {
 		func(config *ServerTestConfig) error { return nil },
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 
 	if runner == nil {
 		t.Fatal("NewRunner() returned nil")
@@ -54,7 +54,7 @@ func TestNewRunnerWithEmptySteps(t *testing.T) {
 
 	steps := []func(config *ServerTestConfig) error{}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 
 	if runner == nil {
 		t.Fatal("NewRunner() returned nil")
@@ -160,7 +160,7 @@ func TestRunAllStepsPass(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -219,7 +219,7 @@ func TestRunStopsAtStage(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -263,7 +263,7 @@ func TestRunStageZero(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -313,7 +313,7 @@ func TestRunStepFails(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -363,7 +363,7 @@ func TestRunFirstStepFails(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -403,7 +403,7 @@ func TestRunConfigHasLogger(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -442,7 +442,7 @@ func TestRunConfigHasServer(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -470,7 +470,7 @@ func TestRunWithNoSteps(t *testing.T) {
 
 	steps := []func(config *ServerTestConfig) error{}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -521,7 +521,7 @@ func TestRunMultipleStepsWithIntermediateFailure(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -571,7 +571,7 @@ func TestRunWithHighStageAndFewerSteps(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -611,7 +611,7 @@ func TestServerStartupTimeEnvVariable(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -648,7 +648,7 @@ func TestServerStartupTimeInvalidEnvVariable(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)
@@ -687,7 +687,7 @@ func TestServerStartupTimeDefaultValue(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	// This will use the default 500ms startup time
@@ -753,7 +753,7 @@ func TestServerExecutablePath(t *testing.T) {
 		},
 	}
 
-	runner := NewRunner(m, steps)
+	runner := NewRunner(m, steps, []int{})
 	ctx := newTestContext()
 
 	err := runner.Run(ctx)

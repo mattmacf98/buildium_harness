@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"slices"
 	"strconv"
 	"time"
 
@@ -12,13 +13,21 @@ import (
 	"github.com/buildium-org/buildium_harness/supabase"
 )
 
-type Runner struct {
-	meta  *meta.Meta
-	steps []func(config *ServerTestConfig) error
+func SkipStep(config *ServerTestConfig) error {
+	logger := *config.Logger
+	logger.LogTitle("Skipping Step")
+	logger.LogInfo("Skipping step")
+	return nil
 }
 
-func NewRunner(meta *meta.Meta, steps []func(config *ServerTestConfig) error) *Runner {
-	return &Runner{meta: meta, steps: steps}
+type Runner struct {
+	meta      *meta.Meta
+	steps     []func(config *ServerTestConfig) error
+	skipSteps []int
+}
+
+func NewRunner(meta *meta.Meta, steps []func(config *ServerTestConfig) error, skipSteps []int) *Runner {
+	return &Runner{meta: meta, steps: steps, skipSteps: skipSteps}
 }
 
 func (r *Runner) Run(ctx context.Context) error {
@@ -38,7 +47,12 @@ func (r *Runner) Run(ctx context.Context) error {
 		if i > r.meta.Stage {
 			break
 		}
-		err := r.runTest(ctx, step)
+		var err error
+		if slices.Contains(r.skipSteps, i) {
+			err = r.runTest(ctx, SkipStep)
+		} else {
+			err = r.runTest(ctx, step)
+		}
 		if err != nil {
 			supaClient.AddProjectRun(ctx, r.meta.ProjectId, i-1, logger.GetAllLogs())
 			return err
