@@ -5,6 +5,7 @@ import (
 
 	"github.com/buildium-org/buildium_harness/logger"
 	"github.com/buildium-org/buildium_harness/meta"
+	"github.com/buildium-org/buildium_harness/utils"
 )
 
 type CliTestConfig struct {
@@ -19,4 +20,5 @@ func RunCliTest(steps []func(config *CliTestConfig) error, skipSteps []int) {
 	ctx := context.WithValue(context.Background(), "logger", logger)
 	runner := NewRunner(meta, steps, skipSteps)
 	runner.Run(ctx)
+	logger.LogInfo("Testing complete! See results at " + utils.GetProjectUrl(meta.ProjectId))
 }
